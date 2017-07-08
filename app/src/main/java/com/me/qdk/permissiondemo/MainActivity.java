@@ -8,14 +8,13 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         }
         if (!permissionList.isEmpty()) {
             ActivityCompat.requestPermissions(this, permissionList.toArray(new String[permissionList.size()]), 1);
-        }else{
+        } else {
             doSomething();
         }
 
@@ -50,6 +49,23 @@ public class MainActivity extends AppCompatActivity {
 //        } else {
 //            makeCall();
 //        }
+    }
+
+    public void buttonClick3(View view) {
+        requestRuntimePermission(new String[]{Manifest.permission.CALL_PHONE,
+                Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, new PermissionListener() {
+            @Override
+            public void onGranted() {
+                Toast.makeText(MainActivity.this, "所有权限都同意了", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onDenied(List<String> deniedPermission) {
+                for (String permission : deniedPermission) {
+                    Toast.makeText(MainActivity.this, "某个权限被拒绝了" + permission, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     private void doSomething() {
